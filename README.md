@@ -9,11 +9,14 @@ This is a Python implementation of the classic board game Reversi (also known as
 - Display of legal moves
 - Cheat mode to switch turns
 - Reset functionality
+- Color themes
+- Config
 
 ## Requirements
 
 - Python 3.x
 - Pygame
+- Toml
 
 ## Installation
 
@@ -44,6 +47,24 @@ python main.py
 - **C**: Toggle cheat mode
 - **Left Alt**: Switch to player 1 (when cheat mode is enabled)
 - **Right Alt**: Switch to player 2 (when cheat mode is enabled)
+
+# Screenshots
+
+Normal look:
+
+![Normal](./screenshots/normal.png)
+
+Realistic look:
+
+![Realistic](./screenshots/realistic.png)
+
+Alternate look:
+
+![Alternate](./screenshots/alternate.png)
+
+Realistic Alternate look:
+
+![Realistic_Alternate](./screenshots/realistic-alternate.png)
 
 ## License
 

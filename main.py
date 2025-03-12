@@ -3,6 +3,7 @@ import pygame.draw as pydraw
 import pygame.gfxdraw
 import time
 import threading
+import tomllib
 import math
 
 import draw
@@ -68,8 +69,10 @@ class Application:
 			"legal": True
 		}
 
-		self.realistic = True
-		self.alternate_colors = False
+		self.config = tomllib.load(open("./config.toml", "rb"))
+
+		self.realistic = self.config["realistic"]
+		self.alternate_colors = self.config["alternate"]
 
 		if self.alternate_colors:
 			self.username1 = "Brown"
@@ -290,6 +293,11 @@ class Application:
 			svg.set_alpha(color[3] if len(color) == 4 else 255)
 			self.screen.blit(svg, ((x if x else 50+100*gridx) - size, (y if y else 50+100*gridy) - size))
 		else:
+			if self.alternate_colors:
+				if color[0:3] == (30,30,30): color = (134, 82, 37)
+				elif color[0:3] == (0,0,0): color = (134, 82, 37, color[3] if len(color) == 4 else 255)
+				elif color[0:3] == (255,255,255): color = (238, 199, 42)
+				elif color[0:3] == (200,200,200): color = (238, 199, 42)
 			draw.aacircle(self.screen, x if x else 50+100*gridx, y if y else 50+100*gridy, size, color)
 
 
