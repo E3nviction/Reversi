@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer shadow for depth -->
+    <defs>
+        <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+            <stop offset="70%" style="stop-color: black; stop-opacity: 0.3"/>
+            <stop offset="100%" style="stop-color: black; stop-opacity: 0"/>
+        </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="48" fill="url(#shadow)"/>
+
+    <!-- Black chip with subtle shading -->
+    <radialGradient id="chipGradient" cx="50%" cy="50%" r="50%">
+        <stop offset="20%" style="stop-color: black; stop-opacity: 0.8"/>
+        <stop offset="100%" style="stop-color: black; stop-opacity: 1"/>
+    </radialGradient>
+    <circle cx="50" cy="50" r="45" fill="url(#chipGradient)" stroke="#333" stroke-width="2"/>
+
+    <!-- Highlight for glossy effect -->
+    <ellipse cx="40" cy="30" rx="20" ry="10" fill="white" opacity="0.1"/>
+</svg>

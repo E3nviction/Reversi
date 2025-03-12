@@ -50,8 +50,6 @@ class Application:
 		self.game = "Othello"
 		self.beginning_player = 1
 		self.player_turn = self.beginning_player
-		self.username1 = "Black"
-		self.username2 = "White"
 		self.winner = None
 		self.grid = [[0 for _ in range(8)] for _ in range(8)]
 
@@ -69,6 +67,20 @@ class Application:
 			"place": True,
 			"legal": True
 		}
+
+		self.realistic = True
+		self.alternate_colors = False
+
+		if self.alternate_colors:
+			self.username1 = "Brown"
+			self.username2 = "Yellow"
+			self.black_svg = pygame.image.load("assets/brown.svg")
+			self.white_svg = pygame.image.load("assets/yellow.svg")
+		else:
+			self.username1 = "Black"
+			self.username2 = "White"
+			self.black_svg = pygame.image.load("assets/black.svg")
+			self.white_svg = pygame.image.load("assets/white.svg")
 
 	def main_loop(self):
 		self.reset_board()
@@ -153,9 +165,6 @@ class Application:
 			if self.player_turn == 3:
 				self.winner = 3
 			pygame.display.update()
-
-
-
 	def reset_board(self):
 		self.grid = [[0 for _ in range(8)] for _ in range(8)]
 		self.grid[4][4] = 2
@@ -187,7 +196,7 @@ class Application:
 				while not self.animation_flip.done:
 					color = self.animation_flip.update()
 					time.sleep(1/1000)
-					draw.aacircle(self.screen, 50+100*x,50+100*y, 39, (color,color,color) if self.grid[y][x] == 2 else (255-color,255-color,255-color))
+					self.draw_chip(x, y, (color,color,color) if self.grid[y][x] == 2 else (255-color,255-color,255-color))
 					pygame.display.update()
 				self.animation_flip.reset()
 			return self.flip_line(x+nextx, y+nexty, val, piece, amount+1, nextx=nextx, nexty=nexty, rep=rep-1)
@@ -214,7 +223,7 @@ class Application:
 				size = int(self.animation_place.update())
 				time.sleep(1/1000)
 				colorchange = int(self.animation_place_colorchange.update())
-				draw.aacircle(self.screen, 50+100*gridposx,50+100*gridposy, size, (30-colorchange,30-colorchange,30-colorchange) if self.player_turn == 1 else (200+colorchange,200+colorchange,200+colorchange))
+				self.draw_chip(gridposx, gridposy, (30-colorchange,30-colorchange,30-colorchange) if self.player_turn == 1 else (200+colorchange,200+colorchange,200+colorchange), size)
 				pygame.display.update()
 		self.grid[gridposy][gridposx] = self.player_turn
 		self.player_turn = next_turn
@@ -227,9 +236,7 @@ class Application:
 	def draw_legal_moves(self, size=20):
 		for x, y in range2(8, 8):
 			if self.check_all(x, y, OPPOSITE[self.player_turn], self.player_turn, 0):
-				draw.aacircle(self.screen, 50+x*100,50+y*100, size, (30,30,30) if self.player_turn == 1 else (200,200,200))
-
-
+				self.draw_chip(x, y, (30,30,30) if self.player_turn == 1 else (200,200,200), size)
 	def is_player_able_to_play(self, player_turn):
 		all_empty_spots = [(x, y) for x in range(8) for y in range(8) if self.grid[y][x] == 0]
 		for i in all_empty_spots:
@@ -261,11 +268,11 @@ class Application:
 			for y in range(8):
 				colorswitch = not colorswitch
 				if (x == 3 or x == 4) and (y == 3 or y == 4):
-					pygame.draw.rect(self.screen, (0,170,0), (x*100, y*100, 100, 100))
+					pygame.draw.rect(self.screen, (0,170,0) if not self.alternate_colors else (148, 114, 70), (x*100, y*100, 100, 100))
 				elif colorswitch:
-					pygame.draw.rect(self.screen, (0,150,0), (x*100, y*100, 100, 100))
+					pygame.draw.rect(self.screen, (0,150,0) if not self.alternate_colors else (128, 94, 50), (x*100, y*100, 100, 100))
 				elif not colorswitch:
-					pygame.draw.rect(self.screen, (0,140,0), (x*100, y*100, 100, 100))
+					pygame.draw.rect(self.screen, (0,140,0) if not self.alternate_colors else (88, 54, 10), (x*100, y*100, 100, 100))
 	def draw_board_grid_lines(self):
 		for i in range(8):
 			pygame.draw.line(self.screen, (0,0,0), (i*100,0), (i*100,800), 2)
@@ -276,7 +283,14 @@ class Application:
 		draw.aacircle(self.screen, 201,601, 8, (0,0,0))
 		draw.aacircle(self.screen, 601,601, 8, (0,0,0))
 	def draw_chip(self, gridx, gridy, color, size=39, x=None, y=None):
-		draw.aacircle(self.screen, x if x else 50+100*gridx, y if y else 50+100*gridy, size, color)
+		if self.realistic:
+			if color[0:3] >= (125, 125, 125): svg = self.white_svg
+			else: svg = self.black_svg
+			svg = pygame.transform.scale(svg, (size*2, size*2))
+			svg.set_alpha(color[3] if len(color) == 4 else 255)
+			self.screen.blit(svg, ((x if x else 50+100*gridx) - size, (y if y else 50+100*gridy) - size))
+		else:
+			draw.aacircle(self.screen, x if x else 50+100*gridx, y if y else 50+100*gridy, size, color)
 
 
 app = Application()
