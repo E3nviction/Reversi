@@ -85,9 +85,9 @@ class Application:
 					if event.key == pygame.K_l: self.do_show_legal_moves = not self.do_show_legal_moves
 					if event.key == pygame.K_c: self.cheats_enabled = not self.cheats_enabled
 					if event.key == pygame.K_a:
-						animationsflip = not animationsflip
-						animationsplace = not animationsplace
-						animationslegals = not animationslegals
+						self.animation_enabled["flip"] = not self.animation_enabled["flip"]
+						self.animation_enabled["place"] = not self.animation_enabled["place"]
+						self.animation_enabled["legal"] = not self.animation_enabled["legal"]
 
 			self.screen.fill((0,0,0))
 			pygame.draw.rect(self.screen, (139,90,43), pygame.Rect(802,2,198,798))
